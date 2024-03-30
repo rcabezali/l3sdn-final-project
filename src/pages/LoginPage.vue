@@ -1,215 +1,121 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-card>
-      <q-card-section>
-        <div class="text-h6" style="text-align: center">Connexion</div>
-        <q-form @submit.prevent="login">
-          <q-input v-model="userId" filled label="ID Utilisateur" :error="error" />
-          <q-input v-model="password" filled type="password" label="Mot de Passe" :error="error" />
-          <div style="margin-top: 20px">
-            <q-btn label="Se connecter" type="submit" color="primary" />
+  <q-layout>
+    <q-page-container class="background">
+      <q-page class="window-height window-width row justify-center items-center">
+        <div class="column">
+          <div class="row">
+            <h5 class="text-h5 text-white q-my-md">Login</h5>
           </div>
-        </q-form>
-      </q-card-section>
-    </q-card>
-  </q-page>
+          <div class="row">
+            <q-card square bordered class="q-pa-lg shadow-1">
+              <q-card-section>
+                <q-form class="q-gutter-md">
+                  <q-input v-model="form.email.value" square clearable type="text" label="Prénom" />
+                  <q-input
+                    v-model="form.password.value"
+                    square
+                    clearable
+                    type="password"
+                    label="Mot de passe"
+                  />
+                </q-form>
+              </q-card-section>
+              <q-card-actions class="q-px-md">
+                <q-btn
+                  unelevated
+                  size="lg"
+                  class="full-width"
+                  label="Login"
+                  color="light-blue-7"
+                  @click="submitLogin(form)"
+                />
+                <!-- Login btn -->
+              </q-card-actions>
+            </q-card>
+          </div>
+        </div>
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
+<script setup>
+import { ref } from 'vue'
+import { Cookies, useQuasar } from 'quasar'
+import { Hooks } from 'src/hooks/loginHooks'
 
-<script>
-export default {
-  data() {
-    return {
-      userId: '',
-      password: '',
-      error: false,
-      users: [
-        {
-          user_id: 'dev1',
-          nom: 'NomDev1',
-          prenom: 'PrenomDev1',
-          adresse: 'Adresse 1',
-          numero_tel: '0123456781',
-          job: 'développeur',
-          manager_id: 'cp1',
-          managing_id: null,
-          password: 'devpassword1'
-        },
-        {
-          user_id: 'dev2',
-          nom: 'NomDev2',
-          prenom: 'PrenomDev2',
-          adresse: 'Adresse 2',
-          numero_tel: '0123456782',
-          job: 'développeur',
-          manager_id: 'cp1',
-          managing_id: null,
-          password: 'devpassword2'
-        },
-        {
-          user_id: 'dev3',
-          nom: 'NomDev3',
-          prenom: 'PrenomDev3',
-          adresse: 'Adresse 3',
-          numero_tel: '0123456783',
-          job: 'développeur',
-          manager_id: 'cp1',
-          managing_id: null,
-          password: 'devpassword3'
-        },
-        {
-          user_id: 'dev4',
-          nom: 'NomDev4',
-          prenom: 'PrenomDev4',
-          adresse: 'Adresse 4',
-          numero_tel: '0123456784',
-          job: 'développeur',
-          manager_id: 'cp2',
-          managing_id: null,
-          password: 'devpassword4'
-        },
-        {
-          user_id: 'dev5',
-          nom: 'NomDev5',
-          prenom: 'PrenomDev5',
-          adresse: 'Adresse 5',
-          numero_tel: '0123456785',
-          job: 'développeur',
-          manager_id: 'cp2',
-          managing_id: null,
-          password: 'devpassword5'
-        },
-        {
-          user_id: 'dev6',
-          nom: 'NomDev6',
-          prenom: 'PrenomDev6',
-          adresse: 'Adresse 6',
-          numero_tel: '0123456786',
-          job: 'développeur',
-          manager_id: 'cp2',
-          managing_id: null,
-          password: 'devpassword6'
-        },
-        {
-          user_id: 'dev7',
-          nom: 'NomDev7',
-          prenom: 'PrenomDev7',
-          adresse: 'Adresse 7',
-          numero_tel: '0123456787',
-          job: 'développeur',
-          manager_id: 'cp3',
-          managing_id: null,
-          password: 'devpassword7'
-        },
-        {
-          user_id: 'dev8',
-          nom: 'NomDev8',
-          prenom: 'PrenomDev8',
-          adresse: 'Adresse 8',
-          numero_tel: '0123456788',
-          job: 'développeur',
-          manager_id: 'cp3',
-          managing_id: null,
-          password: 'devpassword8'
-        },
-        {
-          user_id: 'dev9',
-          nom: 'NomDev9',
-          prenom: 'PrenomDev9',
-          adresse: 'Adresse 9',
-          numero_tel: '0123456789',
-          job: 'développeur',
-          manager_id: 'cp3',
-          managing_id: null,
-          password: 'devpassword9'
-        },
-
-        {
-          user_id: 'cp1',
-          nom: 'NomCP1',
-          prenom: 'PrenomCP1',
-          adresse: 'Adresse CP 1',
-          numero_tel: '0234567891',
-          job: 'chef de projet',
-          manager_id: 'rh1',
-          managing_id: ['dev1', 'dev2', 'dev3'],
-          password: 'cppassword1'
-        },
-        {
-          user_id: 'cp2',
-          nom: 'NomCP2',
-          prenom: 'PrenomCP2',
-          adresse: 'Adresse CP 2',
-          numero_tel: '0234567892',
-          job: 'chef de projet',
-          manager_id: 'rh1',
-          managing_id: ['dev4', 'dev5', 'dev6'],
-          password: 'cppassword2'
-        },
-        {
-          user_id: 'cp3',
-          nom: 'NomCP3',
-          prenom: 'PrenomCP3',
-          adresse: 'Adresse CP 3',
-          numero_tel: '0234567893',
-          job: 'chef de projet',
-          manager_id: 'rh2',
-          managing_id: ['dev7', 'dev8', 'dev9'],
-          password: 'cppassword3'
-        },
-
-        {
-          user_id: 'rh1',
-          nom: 'NomRH1',
-          prenom: 'PrenomRH1',
-          adresse: 'Adresse RH 1',
-          numero_tel: '0345678901',
-          job: 'RH',
-          manager_id: 'dir1',
-          managing_id: ['cp1', 'cp2'],
-          password: 'rhpassword1'
-        },
-        {
-          user_id: 'rh2',
-          nom: 'NomRH2',
-          prenom: 'PrenomRH2',
-          adresse: 'Adresse RH 2',
-          numero_tel: '0345678902',
-          job: 'RH',
-          manager_id: 'dir1',
-          managing_id: ['cp3'],
-          password: 'rhpassword2'
-        },
-
-        {
-          user_id: 'dir1',
-          nom: 'NomDir',
-          prenom: 'PrenomDir',
-          adresse: 'Adresse du directeur',
-          numero_tel: '0456789012',
-          job: 'directeur',
-          manager_id: null,
-          managing_id: ['rh1', 'rh2'],
-          password: 'dirpassword'
-        }
-      ]
-    }
+const form = ref({
+  email: {
+    value: '',
+    required: true
   },
-  methods: {
-    login() {
-      const user = this.users.find((u) => u.user_id === this.userId && u.password === this.password)
-      if (user) {
-        this.$router.push({ name: 'user-home', params: { userId: user.user_id } })
-      } else {
-        this.error = true
-        this.userId = ''
-        this.password = ''
-        this.$refs.userId.focus()
-      }
+  password: {
+    value: '',
+    required: true
+  }
+})
+
+const $q = useQuasar()
+const { isFormValid, validateInput } = Hooks()
+
+const submitLogin = async (form_submited) => {
+  const { valid, error } = isFormValid(form_submited)
+
+  if (valid) {
+    fetch('src/data/users.json')
+      .then((buffer) => {
+        let data = buffer.json()
+        return data
+      })
+      .then((users) => {
+        Object.keys(users).forEach((index) => {
+          if (index !== 0) {
+            let user = users[index]
+            if (
+              user.username == form_submited.email.value &&
+              user.password == form_submited.password.value
+            ) {
+              $q.notify({
+                type: 'positive',
+                message: 'Vous êtes bien connecter en tant que: ' + user.username
+              })
+              Cookies.set('L3SDNUser', user.username)
+              Cookies.set('L3SDNtype', user.type)
+              Cookies.set('L3SDNexpiration', Date.now())
+              document.location.href = '/'
+            } else {
+              $q.notify({
+                type: 'negative',
+                message:
+                  "Le nom d'utilisateur ou le mot de passe est incorecte, veuillez réessayer."
+              })
+            }
+          }
+        })
+      })
+  } else {
+    // Form validation failed, notify the user
+    $q.notify({ type: 'negative', message: 'An error occurred: ' + error })
+  }
+
+  function encryptString(input, key) {
+    let result = ''
+    let i2 = false
+    for (let i = 0; i < input.length + key.length; i++) {
+      result += i2 ? input[Math.floor(i / 2)] || '' : key[Math.floor(i / 2)] || ''
+      i2 = !i2 // Toggle the value of i2
     }
+    return result
   }
 }
 </script>
 
 <style>
-/* Ajoutez du CSS si nécessaire */
+.q-card {
+  width: 360px;
+}
+
+.background {
+  background-image: url('assets/login-background.png');
+  background-size: cover;
+}
 </style>
