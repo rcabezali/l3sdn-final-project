@@ -348,59 +348,66 @@ export default defineComponent({
           JSON.parse(response).length !== 0 &&
           document.getElementsByClassName('q-item-entretien').length == 0
         ) {
-          let var0 = JSON.parse(response)[0][0]
-          let var1 = JSON.parse(response)[0][1]
-          let var2 = JSON.parse(response)[0][2]
-          let var3 = JSON.parse(response)[0][3]
+          Object.keys(response).forEach((index) => {
+            if (JSON.parse(response)[index] == null) {
+              return
+            } else if (Object.keys(JSON.parse(response)[index]).length == 0) {
+              return
+            }
+            let var0 = JSON.parse(response)[index][0]
+            let var1 = JSON.parse(response)[index][1]
+            let var2 = JSON.parse(response)[index][2]
+            let var3 = JSON.parse(response)[index][3]
 
-          let item = document.createElement('div')
-          let username2 = document.createElement('p')
-          username2.classList.add('employe')
-          let date = document.createElement('p')
-          date.classList.add('date')
-          let status = document.createElement('p')
-          let selector = document.createElement('div')
-          status.classList.add('status')
-          item.classList.add('q-item')
-          item.classList.add('q-item-entretien')
-          item.classList.add('q-item-type')
-          item.classList.add('row')
-          item.classList.add('no-wrap')
-          item.classList.add('q-item-list-item')
-          item.classList.add('q-item-entretien-list')
-          selector.classList.add('selector')
-          if (Cookies.get('L3SDNtype') != '1R12gjkt4gMo') {
-            let deleteBtn = document.createElement('p')
-            deleteBtn.innerHTML = 'X'
-            deleteBtn.classList.add('delete-btn-entretien')
-            deleteBtn.addEventListener('click', async () => {
-              const result = await fetch('http://localhost:3000/api/removeEntretien?id=' + var3)
-              const value = await result.text()
-              if (value == 'Success.') {
-                notifier.notify({
-                  type: 'positive',
-                  message:
-                    "L'entretien du " +
-                    var1 +
-                    ' a bien été retirer, il ne sera plus accessible pour personne.'
-                })
-                loadPageData()
-              }
+            let item = document.createElement('div')
+            let username2 = document.createElement('p')
+            username2.classList.add('employe')
+            let date = document.createElement('p')
+            date.classList.add('date')
+            let status = document.createElement('p')
+            let selector = document.createElement('div')
+            status.classList.add('status')
+            item.classList.add('q-item')
+            item.classList.add('q-item-entretien')
+            item.classList.add('q-item-type')
+            item.classList.add('row')
+            item.classList.add('no-wrap')
+            item.classList.add('q-item-list-item')
+            item.classList.add('q-item-entretien-list')
+            selector.classList.add('selector')
+            if (Cookies.get('L3SDNtype') != '1R12gjkt4gMo') {
+              let deleteBtn = document.createElement('p')
+              deleteBtn.innerHTML = 'X'
+              deleteBtn.classList.add('delete-btn-entretien')
+              deleteBtn.addEventListener('click', async () => {
+                const result = await fetch('http://localhost:3000/api/removeEntretien?id=' + var3)
+                const value = await result.text()
+                if (value == 'Success.') {
+                  await updateEmploye()
+                  notifier.notify({
+                    type: 'positive',
+                    message:
+                      "L'entretien du " +
+                      var1 +
+                      ' a bien été retirer, il ne sera plus accessible pour personne.'
+                  })
+                }
+              })
+              item.appendChild(deleteBtn)
+            }
+
+            selector.addEventListener('click', async () => {
+              document.location.href = '/entretien?session=' + var3
             })
-            item.appendChild(deleteBtn)
-          }
-
-          selector.addEventListener('click', async () => {
-            document.location.href = '/entretien?session=' + var3
+            username2.innerHTML = var0
+            date.innerHTML = var1
+            status.innerHTML = var2
+            item.appendChild(username2)
+            item.appendChild(date)
+            item.appendChild(status)
+            item.appendChild(selector)
+            entretienList.appendChild(item)
           })
-          username2.innerHTML = var0
-          date.innerHTML = var1
-          status.innerHTML = var2
-          item.appendChild(username2)
-          item.appendChild(date)
-          item.appendChild(status)
-          item.appendChild(selector)
-          entretienList.appendChild(item)
         }
       }
 
@@ -499,6 +506,11 @@ export default defineComponent({
     async function updateEmploye() {
       Array.from(document.getElementsByClassName('q-item-employe')).forEach((element) => {
         if (!element.innerHTML.startsWith('NOM')) {
+          element.remove()
+        }
+      })
+      Array.from(document.getElementsByClassName('q-item-entretien')).forEach((element) => {
+        if (!element.innerHTML.startsWith('Employe')) {
           element.remove()
         }
       })
@@ -758,7 +770,7 @@ export default defineComponent({
 }
 
 .employe {
-  position: absolute;
+  position: relative;
   left: 5%;
 }
 

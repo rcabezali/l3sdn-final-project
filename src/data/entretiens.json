@@ -1,17 +1,3 @@
 [
-    7,
-    {
-        "username": "dsq",
-        "date": "2024-03-12",
-        "status": "Prévus",
-        "manager": "romain",
-        "id": 6
-    },
-    {
-        "username": "Momo",
-        "date": "2024-03-31",
-        "status": "Prévus",
-        "manager": "ExampleRH",
-        "id": 7
-    }
+    4
 ]

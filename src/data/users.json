@@ -3,7 +3,10 @@
         "username": "romain",
         "password": "monmotdepasse",
         "type": "a1VD1V3B7LhQ",
-        "manage": []
+        "manage": [
+            7,
+            9
+        ]
     },
     {
         "username": "ExampleRH",
@@ -23,6 +26,16 @@
     {
         "username": "saliut",
         "password": "cependant",
+        "type": "1R12gjkt4gMo"
+    },
+    {
+        "username": "Sammy",
+        "password": "hello",
+        "type": "1R12gjkt4gMo"
+    },
+    {
+        "username": "Luc",
+        "password": "Skywalk",
         "type": "1R12gjkt4gMo"
     }
 ]

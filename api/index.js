@@ -102,9 +102,9 @@ app.get('/api/removeEntretien', (req, res) => {
   let entretiensData = JSON.parse(fs.readFileSync('src/data/entretiens.json', 'utf8'))
 
   Object.keys(entretiensData).forEach((index) => {
-    let entretien = entretiensData[index]
-    if (index !== 0) {
-      if (entretien.id == id) {
+    if (index != 0) {
+      let entretien = entretiensData[index]
+      if (entretien.hasOwnProperty('id') && entretien.id == id) {
         entretiensData.splice(index, 1)
       }
     }
