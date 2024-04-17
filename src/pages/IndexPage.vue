@@ -2,7 +2,6 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        
         <q-toolbar-title id="UserTitle">[Utilisateur]</q-toolbar-title>
         <q-btn label="switch mode" color="primary" @click="toggleDarkMode" />
         <div id="logout" class="logout">Logout</div>

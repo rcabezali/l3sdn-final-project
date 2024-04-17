@@ -1,5 +1,9 @@
 <template>
+  <div>
+    <q-btn label="switch mode" color="black" @click="toggleDarkMode" />
+  </div>
   <h1 id="title" class="title">Entretien</h1>
+  
   <div class="chat-container">
     <div class="messageContainer">
       <div v-for="(message, index) in messages" :key="index" class="message">
@@ -20,6 +24,7 @@
 import { ref, onMounted, watch} from 'vue'
 import io from 'socket.io-client'
 import { Cookies } from 'quasar'
+import { Dark } from 'quasar'
 
 if (!Cookies.get('L3SDNUser') || !Cookies.get('L3SDNtype')) {
   document.location.href = '/logout'
@@ -85,13 +90,17 @@ export default {
       newMessage,
       sendMessage
     }
+  },
+  methods: {
+    toggleDarkMode() {
+      Dark.toggle()
+    }
   }
 }
 </script>
 
 <style>
 body {
-  background-color: #10001b;
   overflow-y: hidden;
 }
 
@@ -123,7 +132,6 @@ body {
   margin-left: 50%;
   transform: translateX(-50%);
   width: fit-content;
-  color: white;
 }
 
 .container {
