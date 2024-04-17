@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch} from 'vue'
 import io from 'socket.io-client'
 import { Cookies } from 'quasar'
 
@@ -59,7 +59,7 @@ export default {
     const messages = ref([])
     const newMessage = ref('')
     let sessionId = new URL(document.URL).searchParams.get('session')
-
+    
     socket.on('message', (message) => {
       const [sessionId, username, text] = message.split('/')
       if (message.startsWith(sessionId + '/')) {

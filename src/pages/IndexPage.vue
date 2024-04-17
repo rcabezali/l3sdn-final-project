@@ -2,9 +2,10 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <div id="logout" class="logout">Logout</div>
+        
         <q-toolbar-title id="UserTitle">[Utilisateur]</q-toolbar-title>
-        <div>Fonction</div>
+        <q-btn label="switch mode" color="primary" @click="toggleDarkMode" />
+        <div id="logout" class="logout">Logout</div>
       </q-toolbar>
     </q-header>
 
@@ -187,6 +188,7 @@
 <script>
 import { Cookies, useQuasar } from 'quasar'
 import { defineComponent, onMounted, ref } from 'vue'
+import { Dark } from 'quasar'
 
 export default defineComponent({
   name: 'IndexPage',
@@ -629,6 +631,11 @@ export default defineComponent({
       },
       notifier
     }
+  },
+  methods: {
+    toggleDarkMode() {
+      Dark.toggle()
+    }
   }
 })
 </script>
@@ -808,10 +815,7 @@ export default defineComponent({
   font-size: 20px;
 }
 
-body {
-  background: #10001b;
-  overflow-y: hidden;
-}
+
 
 .action {
   position: relative;
@@ -886,8 +890,14 @@ body {
 .employees-list-content .employe-list,
 .entretien-list-content .entretien-list {
   position: relative;
-  border: 1px solid white;
-  background-color: white;
+  border: 1px solid black;
+  background: repeating-radial-gradient(
+    circle at 15%,
+    transparent 0%,
+    transparent 10%,
+    rgba(54, 89, 219, 0.33) 10%,
+    rgba(54, 89, 219, 0.33) 17%
+  );;
   max-height: 60vh;
   overflow-y: auto;
 }
