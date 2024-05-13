@@ -15,13 +15,13 @@ steps:
 - script: npm install
   displayName: 'Install dependencies'
 
-- script: quasar build
+- script: npm run build
   displayName: 'Build Quasar application'
 
 - script: |
-    docker build -t rodacr01.azurecr.io/quasar:$(Build.BuildId) .
+    docker build -t rodacr01.azurecr.io/hanif:$(Build.BuildId) .
     docker login rodacr01.azurecr.io -u l3sdn -p $(dockerPassword)
-    docker push rodacr01.azurecr.io/quasar:$(Build.BuildId)
+    docker push rodacr01.azurecr.io/hanif:$(Build.BuildId)
   env:
     dockerPassword: $(dockerPassword)
   displayName: 'Build and push Docker image'
