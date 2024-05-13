@@ -1,21 +1,27 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+  branches:
+    include:
+    - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
-- script:
-    npm install
-    npm run build
-  displayName: 'Run a one-line script'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- script: npm install
+  displayName: 'Install dependencies'
+
+- script: quasar build
+  displayName: 'Build Quasar application'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    docker build -t rodacr01.azurecr.io/quasar:$(Build.BuildId) .
+    docker login rodacr01.azurecr.io -u l3sdn -p $(dockerPassword)
+    docker push rodacr01.azurecr.io/quasar:$(Build.BuildId)
+  env:
+    dockerPassword: $(dockerPassword)
+  displayName: 'Build and push Docker image'
